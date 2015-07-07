@@ -1,0 +1,340 @@
+
+Test environment: 
+	Thinkpad X200 
+		CPU: P8600, 
+		RAM: 4G, 
+		OS : Ubuntu 12.04 LTS
+		HDD: HITACH 250G SATA HDD, 5400 rpm
+
+============================================================================
+1. Test of logGenerator
+	1.1 correct inputs, expecting "accomplished" indication and a statistics.
+			./logGenerator ./
+
+			Log generation accomplished.
+			Log generation cost is 58347ms.
+
+	1.2 incorrect inputs: path is missing, expecting help info:
+			./logGenerator 
+			Parameter is missing.
+
+			Usage : logQuerier <PATH> [optional: start date] [optional: start time] [optional: end date] [optional: end time]
+					start/end date format YYYY-MM-DD
+					start/end time format hh:00
+
+	1.3 generate log to other directory instead of current folder:
+			dave@dave-ThinkPad-X200:~/coding/itv/ChinaNetCenter/LogGeneratorQuerier/src$ mkdir ../remote
+			dave@dave-ThinkPad-X200:~/coding/itv/ChinaNetCenter/LogGeneratorQuerier/src$ ls ../remote
+			dave@dave-ThinkPad-X200:~/coding/itv/ChinaNetCenter/LogGeneratorQuerier/src$ ./generate.sh ../remote
+
+			Log generation accomplished.
+			Log generation cost is 53058ms.
+			dave@dave-ThinkPad-X200:~/coding/itv/ChinaNetCenter/LogGeneratorQuerier/src$ ls ../remote
+			2014-10-31.log
+			
+
+	1.4 multiple logs generationg, expecting multiple log files:
+			dave@dave-ThinkPad-X200:~/coding/itv/ChinaNetCenter/LogGeneratorQuerier/src$ ./generate.sh ./ 2014-10-31 23:50 2014-11-01 00:11
+
+			Log generation accomplished.
+			Log generation cost is 602ms.
+			dave@dave-ThinkPad-X200:~/coding/itv/ChinaNetCenter/LogGeneratorQuerier/src$ ll
+			total 4872
+			drwxrwxr-x 2 dave dave    4096 May 15 18:46 ./
+			drwxrwxr-x 4 dave dave    4096 May 15 16:58 ../
+			-rwx------ 1 dave dave  589388 May 15 18:46 2014-10-31.log*
+			-rwx------ 1 dave dave  707287 May 15 18:46 2014-11-01.log*
+			-.....		
+
+==============================================================================
+
+2. Test of logQuerier
+	2.0 start logQuerier
+		2.0.1 correct inputs, expecting indications 
+			  (1) how many files loaded, 
+			  (2) how many time spent
+			  (3) new command inputting guide:
+				Initialization...
+				File 2014-11-01.log found, parsing...
+				File 2014-10-31.log found, parsing...
+				Total 2 files loaded.
+				>> Total initialization cost is 25427 ms.
+
+				Please input a new command:
+
+
+		2.0.2 with no path parameter, expecting error indication and help information:
+				Parameter is missing.
+
+				Usage : logQuerier <PATH>
+
+		2.0.3 with a path which points to a directory without any log file,
+			  expecting indication that no log file loaded:
+				Initialization...
+				Total 0 files loaded.
+				>> Total initialization cost is 0 ms.
+
+				Please input a new command:
+
+		2.0.4 with a remote path which contains log file, expecting normal initialization and correct results:
+					dave@dave-ThinkPad-X200:~/coding/itv/ChinaNetCenter/LogGeneratorQuerier/src$ ./query.sh ../remote
+
+					Initialization...
+					File 2014-10-31.log found, parsing...
+					Total 1 files loaded.
+					>> Total initialization cost is 23333 ms.
+
+					Please input a new command:
+
+	2.1 incorrect inputs:
+		2.1.1 end time earlier than start time, expecting failure indications.
+				Please input a new command:
+				QUERY 192.168.3.123 1 2014-10-31 05:15 2014-10-31 05:13
+				Invalid time input: end time is earlier than or equal to  start time.
+				>> Query cost is 0 ms.
+
+		2.1.2 end time equals start time, expecting failure indications.
+				Please input a new command:
+				QUERY 192.168.3.123 1 2014-10-31 05:15 2014-10-31 05:15
+				Invalid time input: end time is earlier than or equal to  start time.
+				>> Query cost is 0 ms.
+
+		2.1.3 incorrect minute number, expecting failure indications.
+				Please input a new command:
+				QUERY 192.168.3.123 1 2014-10-31 05:15 2014-10-31 05:77
+				Invalid time input: check year, month, date, hour and minute .
+				>> Query cost is 0 ms.
+
+		2.1.4 incorrect hour number, expecting failure indications.
+				QUERY 192.168.3.123 1 2014-10-31 05:15 2014-10-31 25:01
+				Invalid time input: check year, month, date, hour and minute .
+				>> Query cost is 1 ms.
+
+		2.1.5 incorrect characters, expecting failure indications.
+				Please input a new command:
+				QUERY 192.168.3.123 1 2014-10-31 05:15 2014-10-31 05:AA       
+				Invalid time input: check year, month, date, hour and minute .
+				>> Query cost is 0 ms.
+
+		2.1.5 incorrect IP address characters, expecting failure indications.
+				Please input a new command:
+				QUERY 192.168.4.ABC 1 2014-10-31 23:59 2014-10-31 01:00
+				Invalid server IP address
+				>> Query cost is 0 ms.
+
+		2.1.6 path is missing when starting command tool, expecting help info:
+				./logQuerier 
+				Parameter is missing.
+
+				Usage : logQuerier <PATH>
+
+
+
+	------------------------------------------------------------------------------
+	2.2 correct inputs
+		2.2.1 start/end time are all in the range of log file data,
+			  expecting correct outupts (should be 600 records).
+				Please input a new command:
+				QUERY 192.168.3.123 1 2014-10-31 05:15 2014-10-31 16:15
+				......
+				(2014-10-31 16:09, 55%),
+				(2014-10-31 16:10,  0%),
+				(2014-10-31 16:11, 81%),
+				(2014-10-31 16:12,  9%),
+				(2014-10-31 16:13, 67%),
+				(2014-10-31 16:14, 42%) 
+
+				Total 600 records found.
+				>> Query cost is 17 ms.
+
+	------------------------------------------------------------------------------
+	2.3 corner cases
+		2.3.1 start/end time are exactly the border of log file time range,
+			  expecting outpus except last record (should be 1439 records).
+				Please input a new command:
+				QUERY 192.168.3.123 1 2014-10-31 00:00 2014-10-31 23:59
+				.....
+				(2014-10-31 00:53, 74%),
+				(2014-10-31 00:54, 51%),
+				(2014-10-31 00:55,  9%),
+				(2014-10-31 00:56, 53%),
+				(2014-10-31 00:57, 35%),
+				(2014-10-31 00:58, 70%) 
+
+				Total 1439 records found.
+				>> Query cost is 67 ms.
+
+		2.3.2 start time is exactly the start time of log file time range,
+			  end time is the start time of next log (day) file.
+			  expecting outpus all day's record (should be 1440 records).
+				Please input a new command:
+				QUERY 192.168.3.123 1 2014-10-31 00:00 2014-10-31 00:00
+				.....
+				(2014-10-31 00:51, 89%),
+				(2014-10-31 00:52, 56%),
+				(2014-10-31 00:53, 74%),
+				(2014-10-31 00:54, 51%),
+				(2014-10-31 00:55,  9%),
+				(2014-10-31 00:56, 53%),
+				(2014-10-31 00:57, 35%),
+				(2014-10-31 00:58, 70%),
+				(2014-10-31 00:59, 20%) 
+
+				Total 1440 records found.
+				>> Query cost is 70 ms.
+
+		2.3.3 start time is exactly the end time of current log file time range,
+			  end time is the start time of next log (day) file.
+			  expecting outpus last record of current day (should be 1 record).
+				Please input a new command:
+				QUERY 192.168.3.123 1 2014-10-31 23:59 2014-10-31 01:00
+				(2014-10-31 00:59, 20%) 
+
+				Total 1 records found.
+				>> Query cost is 2 ms.
+
+		2.3.4 start time is exactly the last minute of previous day,
+			  end time is the start time of current log (day) file.
+			  expecting outpus without any record (should be 0 record).
+				Please input a new command:
+				QUERY 192.168.3.123 1 2014-10-30 23:59 2014-10-31 00:00
+
+				Total 0 records found.
+				>> Query cost is 1 ms.
+
+		2.3.5 end time is exactly next minute to start time (both in log range)
+			  expecting outpus the record of start time (should be 1 record).
+				Please input a new command:
+				QUERY 192.168.3.123 1 2014-10-31 05:15 2014-10-31 05:16
+				(2014-10-31 06:15,  0%) 
+
+				Total 1 records found.
+				>> Query cost is 0 ms.
+
+
+		2.3.5 input IP address of last server,
+			  start time is exactly the end time of current log file time range,
+			  end time is later than the start time of next log (day) file.
+			  expecting outpus last record of current day (should be 1 record).
+				Please input a new command:
+				QUERY 192.168.4.231 1 2014-10-31 23:59 2014-10-31 01:00
+				(2014-10-31 00:59, 65%) 
+
+				Total 1 records found.
+				>> Query cost is 3 ms.
+
+		2.3.6 input IP address next to last server,
+			  start time is exactly the end time of current log file time range,
+			  end time is the start time of next log (day) file.
+			  expecting outpus without any record (should be 0 record).
+				Please input a new command:
+				QUERY 192.168.4.232 1 2014-10-31 23:59 2014-10-31 01:00
+
+				Total 0 records found.
+				>> Query cost is 0 ms.
+
+	2.3 extra: query range cover several days (there are enough log files, and query range is coverd by those log files)
+		expecting correct results.
+			(use log generated by case 1.4 previously)
+			Please input a new command:
+			QUERY 192.168.3.123 1 2014-10-31 23:50 2014-10-31 00:05
+			(2014-10-31 23:50, 20%),
+			(2014-10-31 23:51, 84%),
+			(2014-10-31 23:52, 53%),
+			(2014-10-31 23:53, 54%),
+			(2014-10-31 23:54, 61%),
+			(2014-10-31 23:55, 92%),
+			(2014-10-31 23:56, 57%),
+			(2014-10-31 23:57, 21%),
+			(2014-10-31 23:58, 39%),
+			(2014-10-31 23:59, 48%),
+			(2014-11-01 00:00, 24%),
+			(2014-11-01 00:01,  7%),
+			(2014-11-01 00:02, 24%),
+			(2014-11-01 00:03, 31%),
+			(2014-11-01 00:04, 65%) 
+
+			Total 15 records found.
+			>> Query cost is 0 ms.
+
+			
+
+==============================================================================
+
+3. Performance Test
+	3.2 output all packets of one cpu on some a server
+		see case 2.3.2, total time is 70ms.
+
+	3.3 keep running Query command in 2.3.2 60 times:
+		min: 29 ms, max: 96 ms, average: 72.97 ms.
+			>> Query cost is 69 ms.
+			>> Query cost is 68 ms.
+			>> Query cost is 78 ms.
+			>> Query cost is 67 ms.
+			>> Query cost is 79 ms.
+			>> Query cost is 68 ms.
+			>> Query cost is 76 ms.
+			>> Query cost is 78 ms.
+			>> Query cost is 96 ms.
+			>> Query cost is 68 ms.
+			>> Query cost is 73 ms.
+			>> Query cost is 67 ms.
+			>> Query cost is 67 ms.
+			>> Query cost is 29 ms.
+			>> Query cost is 68 ms.
+			>> Query cost is 70 ms.
+			>> Query cost is 68 ms.
+			>> Query cost is 68 ms.
+			>> Query cost is 76 ms.
+			>> Query cost is 68 ms.
+			>> Query cost is 93 ms.
+			>> Query cost is 67 ms.
+			>> Query cost is 68 ms.
+			>> Query cost is 69 ms.
+			>> Query cost is 94 ms.
+			>> Query cost is 68 ms.
+			>> Query cost is 71 ms.
+			>> Query cost is 66 ms.
+			>> Query cost is 94 ms.
+			>> Query cost is 76 ms.
+			>> Query cost is 69 ms.
+			>> Query cost is 69 ms.
+			>> Query cost is 93 ms.
+			>> Query cost is 70 ms.
+			>> Query cost is 70 ms.
+			>> Query cost is 77 ms.
+			>> Query cost is 68 ms.
+			>> Query cost is 94 ms.
+			>> Query cost is 68 ms.
+			>> Query cost is 68 ms.
+			>> Query cost is 95 ms.
+			>> Query cost is 93 ms.
+			>> Query cost is 72 ms.
+			>> Query cost is 80 ms.
+			>> Query cost is 78 ms.
+			>> Query cost is 70 ms.
+			>> Query cost is 67 ms.
+			>> Query cost is 66 ms.
+			>> Query cost is 78 ms.
+			>> Query cost is 67 ms.
+			>> Query cost is 80 ms.
+			>> Query cost is 68 ms.
+			>> Query cost is 69 ms.
+			>> Query cost is 68 ms.
+			>> Query cost is 69 ms.
+			>> Query cost is 68 ms.
+			>> Query cost is 70 ms.
+			>> Query cost is 68 ms.
+			>> Query cost is 70 ms.
+			>> Query cost is 69 ms.
+
+
+
+
+
+
+
+
+
+
+
