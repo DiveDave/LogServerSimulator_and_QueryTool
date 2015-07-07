@@ -1,0 +1,23 @@
+
+05-08: 
+	system design		1 hour
+	comm.cpp/.h		2 hours
+	logGneorator.cpp/.h	3 hours
+	document		1 hour
+	test			1 hour
+	
+05-09:
+	logFile.cpp/.h		3 hours
+	comm.cpp/.h		1 hour
+
+05-10:
+	logQuerier.cpp/.h	3 hours
+	logFile.cpp/.h		2 hour
+	comm.cpp/.h		1 hour
+	logGneorator.cpp/.h	1 hour
+	test 			2 hours
+	
+05-16
+	document		4 hours
+	test			1 hour
+
