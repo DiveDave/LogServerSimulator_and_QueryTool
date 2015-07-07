@@ -1,0 +1,1 @@
+./logQuerier $1
