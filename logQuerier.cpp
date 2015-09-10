@@ -1,5 +1,5 @@
 /*******************************************************************
-File name		:	logQuerier.cpp
+File name	:	logQuerier.cpp
 Created		:	2015-05-10
 Usage		:	Implementation of log file querier
 Owner		:	Yuanda Xu
@@ -13,7 +13,7 @@ using namespace std;
 
 
 /*******************************************************************
-Function		:	inputChk
+Function	:	inputChk
 Created		:	2015-05-10
 Usage		:	check for all input parameters of log querier
 input		:	parameters: 	server IP, CPU id, start date/time, end date/time, could cover multiple days
@@ -58,7 +58,7 @@ bool inputChk(STRING svr_ip, int cpuId, STRING startDate, STRING startMin, STRIN
 
 
 /*******************************************************************
-Function		:	init
+Function	:	init
 Created		:	2015-05-10
 Usage		:	mian function of log querier
 input		:	parameters: 	path if only for  one day (in default 2014-10-31), logFile object
@@ -126,7 +126,7 @@ bool init(STRING path, LogFile& lgf)
 
 
 /*******************************************************************
-Function		:	main
+Function	:	main
 Created		:	2015-05-10
 Usage		:	mian function of log querier
 input		:	parameters: 	path of log files
