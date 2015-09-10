@@ -1,5 +1,5 @@
 /*******************************************************************
-File name		:	comm.cpp
+File name	:	comm.cpp
 Created		:	2015-05-08
 Usage		:	common process implementation
 Owner		:	Yuanda Xu
@@ -11,7 +11,7 @@ using namespace std;
 
 
 /*******************************************************************
-Function		:	digitCheck
+Function	:	digitCheck
 Created		:	2015-05-08
 Usage		:	to check whether all characters in a string are all digits.
 input		:	string
@@ -33,7 +33,7 @@ bool digitCheck(STRING str)
 }
 
 /*******************************************************************
-Function		:	int2str
+Function	:	int2str
 Created		:	2015-05-08
 Usage		:	to translate integer into string
 input		:	integer
@@ -50,7 +50,7 @@ STRING int2str(int in)
 }  
 
 /*******************************************************************
-Function		:	int2strAign
+Function	:	int2strAign
 Created		:	2015-05-08
 Usage		:	to translate integer into aligned string
 input		:	integer
@@ -78,7 +78,7 @@ STRING int2strAign(int in)
 
  
 /*******************************************************************
-Function		:	str2int
+Function	:	str2int
 Created		:	2015-05-08
 Usage		:	to translate string into integer
 input		:	string
@@ -96,7 +96,7 @@ int str2int(STRING str)
 }  
 
 /*******************************************************************
-Function		:	ipStr2Int
+Function	:	ipStr2Int
 Created		:	2015-05-08
 Usage		:	to translate IP string into IP integer
 input		:	IP string 
@@ -124,7 +124,7 @@ IPADDR ipStr2Int(STRING ip_str)
 }
 
 /*******************************************************************
-Function		:	ipaddr2str
+Function	:	ipaddr2str
 Created		:	2015-05-08
 Usage		:	to translate IP integer to IP string
 input		:	IP integer 
@@ -152,7 +152,7 @@ STRING ipaddr2str(IPADDR ipaddr)
 }
 
 /*******************************************************************
-Function		:	ipCheck
+Function	:	ipCheck
 Created		:	2015-05-08
 Usage		:	to check whether it's a valid IP string or not, and translate to IP integer if valid
 input		:	IP string 
@@ -203,10 +203,10 @@ bool ipCheck(STRING ip_str, IPADDR& ipaddr)
 
 
 /*******************************************************************
-Function		:	timeStamp2str
+Function	:	timeStamp2str
 Created		:	2015-05-08
 Usage		:	to tanslate UNIX timestamp to time string 
-					in format "YYYY-MM-DD hh:mm:ss" (ss is not used)
+			in format "YYYY-MM-DD hh:mm:ss" (ss is not used)
 input		:	time_t
 return		:	time string
 *******************************************************************/
@@ -233,10 +233,10 @@ STRING timeStamp2str(time_t stamp)
 }
 
 /*******************************************************************
-Function		:	str2timeStamp
+Function	:	str2timeStamp
 Created		:	2015-05-08
 Usage		:	to tanslate time string to UNIX timestamp
-					time string format: "YYYY-MM-DD hh:mm:ss" (ss is not used)
+			time string format: "YYYY-MM-DD hh:mm:ss" (ss is not used)
 input		:	time string
 output		:	time_t
 return		:	string
