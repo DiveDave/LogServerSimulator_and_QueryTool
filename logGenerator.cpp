@@ -1,5 +1,5 @@
 /*******************************************************************
-File name		:	logGenerator.cpp
+File name	:	logGenerator.cpp
 Created		:	2015-05-08
 Usage		:	Implementation of log file generator
 Owner		:	Yuanda Xu
@@ -14,7 +14,7 @@ using namespace std;
 
 
 /*******************************************************************
-Function		:	genLogThread
+Function	:	genLogThread
 Created		:	2015-05-08
 Usage		:	thread process of log generator, each thread response for one day's log generating
 input		:	thread parameters
@@ -95,7 +95,7 @@ void* genLogThread(void* para)
 }
 
 /*******************************************************************
-Function		:	createThreads
+Function	:	createThreads
 Created		:	2015-05-08
 Usage		:	create threads for log generator, each thread response for one day's log generating
 input		:	start date, start UNIX timestamp, end UNIX timestamp, path assigned by user
@@ -167,7 +167,7 @@ int createThreads(STRING start, time_t startStamp, time_t endStamp, STRING path)
 
 
 /*******************************************************************
-Function		:	main
+Function	:	main
 Created		:	2015-05-08
 Usage		:	mian function of log generator
 input		:	parameters: 	path if only for  one day (in default 2014-10-31)
