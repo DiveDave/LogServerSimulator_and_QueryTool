@@ -1,5 +1,5 @@
 /*******************************************************************
-File name		:	logFile.cpp
+File name	:	logFile.cpp
 Created		:	2015-05-09
 Usage		:	Implementation of class logFile
 Owner		:	Yuanda Xu
@@ -12,7 +12,7 @@ using namespace std;
 
 
 /*******************************************************************
-Function		:	constructor
+Function	:	constructor
 Created		:	2015-05-09
 Usage		:	construct
 input		:	none
@@ -23,7 +23,7 @@ LogFile::LogFile()
 }
 
 /*******************************************************************
-Function		:	distructor
+Function	:	distructor
 Created		:	2015-05-09
 Usage		:	to release resource
 input		:	none
@@ -41,7 +41,7 @@ LogFile::~LogFile()
 }
 
 /*******************************************************************
-Function		:	loadLog
+Function	:	loadLog
 Created		:	2015-05-09
 Usage		:	to load all log content into data structure from a log file
 input		:	log filename string
@@ -155,12 +155,11 @@ bool LogFile::loadLog(STRING logFileName)
 	}
 
 	return false;
-
 }
 
 
 /*******************************************************************
-Function		:	writeLog
+Function	:	writeLog
 Created		:	2015-05-09
 Usage		:	to write one log into file
 input		:	file descriptor, UNIX timestamp/IP/CPU id/CPU load of record
@@ -181,7 +180,7 @@ bool LogFile::writeLog(int fd, int timestamp, int ipaddr, int cpuId, int cpuLoad
 }
 
 /*******************************************************************
-Function		:	queryLog
+Function	:	queryLog
 Created		:	2015-05-09
 Usage		:	to query records which meets given conditions
 input		:	IP integer, CPU id, query start/end UNIX timestamp
@@ -243,7 +242,7 @@ vector<STRING> LogFile::queryLog(IPADDR ipaddr, int cpuId, time_t start, time_t 
 
 
 /*******************************************************************
-Function		:	getLineData
+Function	:	getLineData
 Created		:	2015-05-09
 Usage		:	to parse timestamp, IP, CPU id and CPU load from one record line in log file
 intput 		:	line string
@@ -312,7 +311,7 @@ bool LogFile::getLineData(STRING line, int& ipaddr, int& cpuIdInRecord, time_t& 
 
 
 /*******************************************************************
-Function		:	traversalAllRecords
+Function	:	traversalAllRecords
 Created		:	2015-05-09
 Usage		:	to print all loaded log records, for debug.
 intput 		:	none
