@@ -1,7 +1,6 @@
 # LogServerSimulator_and_QueryTool
 It's a log server simulator and query tool. It can simulate log generating of 1000 servers with a simple record like "time, server ip, cpu id, cpu load".
 
-
 This file includes:
 	- description of each file
 	- how to build program
